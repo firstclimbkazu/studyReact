@@ -16,7 +16,7 @@ const Map = ({ location }) => (
     containerElement={(<div />)}
     mapElement={(<div className="map" />)}
     location={location}
-    marker={{ location }}
+    marker={{ position: location }}
   />
 );
 

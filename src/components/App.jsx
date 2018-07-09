@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 
 import Map from './Map';
 import SearchForm from './SearchForm';
 import GeocodeResult from './GeocodeResult';
+import HotelsTable from './HotelsTable';
 
-const GEOCODE_ENDPOINT = 'https://maps.googleapis.com/maps/api/geocode/json';
+import { getcode } from '../domain/Geocoder';
 
 class App extends Component {
   constructor(props) {
@@ -15,6 +15,10 @@ class App extends Component {
         lat: 35.658505,
         lng: 139.7454329,
       },
+      hotels: [
+        { id: 111, name: 'オークラ' , url: 'http://www.hotelokura.co.jp/tokyo/' },
+        { id: 222, name: 'アパホテル' , url: 'https://www.apa.co.jp/' },
+      ],
     };
   }
 
@@ -29,17 +33,11 @@ class App extends Component {
   }
 
   handlePlaceSubmit(place) {
-    axios
-      .get(GEOCODE_ENDPOINT, { params: { address: place } })
-      .then((results) => {
-        const data = results.data;
-        const result = data.results[0];
-        switch (data.status) {
+    getcode(place)
+      .then(({ status, address, location }) => {
+        switch (status) {
           case 'OK': {
-            this.setState({
-              address: result.formatted_address,
-              location: result.geometry.location,
-            });
+            this.setState({ address, location });
             break;
           }
           case 'ZERO_RESULTS': {
@@ -60,14 +58,20 @@ class App extends Component {
 
   render() {
     return (
-      <div>
-        <h1>緯度経度検索</h1>
+      <div className="app">
+        <h1 className="app-title">ホテル検索</h1>
         <SearchForm onSubmit={place => this.handlePlaceSubmit(place)} />
-        <GeocodeResult
-          address={this.state.address}
-          location={this.state.location}
-        />
-        <Map location={this.state.location} />
+        <div className="result-area">
+          <Map location={this.state.location} />
+          <div className="result-right">
+            <GeocodeResult
+              address={this.state.address}
+              location={this.state.location}
+            />
+            <h2>ホテル検索結果</h2>
+            <HotelsTable hotels={this.state.hotels} />
+          </div>
+        </div>
       </div>
     );
   }
