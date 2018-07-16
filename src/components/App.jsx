@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-
+import _ from 'lodash';
 import Map from './Map';
 import SearchForm from './SearchForm';
 import GeocodeResult from './GeocodeResult';
 import HotelsTable from './HotelsTable';
 
 import { getcode } from '../domain/Geocoder';
+import { searchHotelByLocation } from '../domain/HotelRepository';
+
+const sortedHotels = (hotels, sortKey) => _.sortBy(hotels, h => h[sortKey]);
 
 class App extends Component {
   constructor(props) {
@@ -16,9 +19,8 @@ class App extends Component {
         lng: 139.7454329,
       },
       hotels: [
-        { id: 111, name: 'オークラ' , url: 'http://www.hotelokura.co.jp/tokyo/' },
-        { id: 222, name: 'アパホテル' , url: 'https://www.apa.co.jp/' },
       ],
+      sortKey: 'price',
     };
   }
 
@@ -38,7 +40,7 @@ class App extends Component {
         switch (status) {
           case 'OK': {
             this.setState({ address, location });
-            break;
+            return searchHotelByLocation(location);
           }
           case 'ZERO_RESULTS': {
             this.setErrorMessage('結果が見つかりませんでした');
@@ -49,11 +51,22 @@ class App extends Component {
             break;
           }
         }
+        return [];
+      })
+      .then((hotels) => {
+        this.setState({ hotels: sortedHotels(hotels, this.state.sortKey) });
       })
       .catch((error) => {
         console.log(error);
         this.setErrorMessage('通信に失敗しました');
       });
+  }
+
+  handleSortKeyChange(sortKey) {
+    this.setState({
+      sortKey,
+      hotels: sortedHotels(this.state.hotels, sortKey),
+    });
   }
 
   render() {
@@ -69,7 +82,11 @@ class App extends Component {
               location={this.state.location}
             />
             <h2>ホテル検索結果</h2>
-            <HotelsTable hotels={this.state.hotels} />
+            <HotelsTable
+              hotels={this.state.hotels}
+              sortKey={this.state.sortKey}
+              onSort={sortKey => this.handleSortKeyChange(sortKey)}
+            />
           </div>
         </div>
       </div>

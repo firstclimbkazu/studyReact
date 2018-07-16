@@ -12,8 +12,6 @@ export const getcode = place =>
       if (typeof result === 'undefined') {
         return { status };
       }
-  //        console.log('testlog');
-  //        console.log(data);
 
       const address = result.formatted_address;
       const location = result.geometry.location;
