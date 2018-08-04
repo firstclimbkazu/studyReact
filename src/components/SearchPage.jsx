@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import queryString from 'query-string';
-import Map from './Map';
-import SearchForm from './SearchForm';
-import GeocodeResult from './GeocodeResult';
-import HotelsTable from './HotelsTable';
+import SearchForm from '../containers/SearchForm';
+// import Map from './Map';
+// import GeocodeResult from './GeocodeResult';
+// import HotelsTable from './HotelsTable';
 
 import { getcode } from '../domain/Geocoder';
 import { searchHotelByLocation } from '../domain/HotelRepository';
@@ -27,10 +27,10 @@ class SearchPage extends Component {
   }
 
   componentDidMount() {
-    const place = this.getPlaceParam();
-    if (place && place.length > 0) {
-      this.startSearch(place);
-    }
+    // const place = this.getPlaceParam();
+    // if (place && place.length > 0) {
+    //   this.startSearch(place);
+    // }
   }
 
   getPlaceParam() {
@@ -52,10 +52,6 @@ class SearchPage extends Component {
     });
   }
 
-  handlePlaceChange(place) {
-    this.setState({ place });
-    console.log(place);
-  }
 
   handlePlaceSubmit(e) {
     e.preventDefault();
@@ -103,10 +99,9 @@ class SearchPage extends Component {
       <div className="search-page">
         <h1 className="app-title">ホテル検索</h1>
         <SearchForm
-          place={this.state.place}
-          onPlaceChange={place => this.handlePlaceChange(place)}
-          onSubmit={(e) => this.handlePlaceSubmit(e)}
+          onSubmit={e => this.handlePlaceSubmit(e)}
         />
+        {/*
         <div className="result-area">
           <Map location={this.state.location} />
           <div className="result-right">
@@ -122,6 +117,7 @@ class SearchPage extends Component {
             />
           </div>
         </div>
+        */}
       </div>
     );
   }
