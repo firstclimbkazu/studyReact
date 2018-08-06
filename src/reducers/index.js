@@ -1,10 +1,30 @@
-//import { Object } from "core-js";
+import { combineReducers } from 'redux';
 
-export default (state = { place: 'hoge' }, action) => {
+const place = (state = '東京タワー', action) => {
   switch (action.type) {
     case 'CHANGE_PLACE':
-      return Object.assign({}, state, { place: action.place });
+      return action.place;
     default:
       return state;
   }
 };
+
+const geocodeResult = (
+  state = {
+    address: '',
+    location: { lat: 35.6585805, lng: 139.7454329 },
+  },
+  action,
+) => {
+  switch (action.type) {
+    case 'GEOCODE_FETCHED':
+      return {
+        address: action.address,
+        location: action.location,
+      };
+    default:
+      return state;
+  }
+};
+
+export default combineReducers({ place, geocodeResult });
