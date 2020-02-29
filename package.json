@@ -32,7 +32,7 @@
     "stringstream": "^1.0.0",
     "style-loader": "^0.19.1",
     "webpack": "^3.6.0",
-    "webpack-dev-server": "^2.8.2"
+    "webpack-dev-server": "^3.1.11"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.6",
