@@ -6,7 +6,7 @@ import Map from './Map';
 import SearchForm from './SearchForm';
 import GeocodeResult from './GeocodeResult';
 import HotelsTable from './HotelsTable';
-
+import userEnv from 'userEnv';
 import { getcode } from '../domain/Geocoder';
 import { searchHotelByLocation } from '../domain/HotelRepository';
 
@@ -27,6 +27,17 @@ class SearchPage extends Component {
   }
 
   componentDidMount() {
+    // public/index.html設定のmapJsスクリプトタグを削除
+    // APIキー設定のスクリプトタグを生成し設定したが、
+    // index.html側にないとエラー発生する為、mapJs削除⇢再作成を実施。
+    const rmTag = document.getElementById('mapJs');
+    rmTag.remove();
+    const mapScript = document.createElement('script');
+    const MAP_SCRIPT = "https://maps.googleapis.com/maps/api/js?key=";
+    mapScript.src = MAP_SCRIPT + userEnv.REACT_APP_MAP_DEV_API_KEY;
+    mapScript.async = true;
+    document.body.appendChild(mapScript);
+
     const place = this.getPlaceParam();
     if (place && place.length > 0) {
       this.startSearch(place);

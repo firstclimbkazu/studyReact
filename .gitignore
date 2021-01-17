@@ -1,3 +1,4 @@
 node_modules
-.env
-.env.*
+.env/*.js
+.DS_Store
+.idea
