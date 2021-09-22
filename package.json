@@ -18,7 +18,7 @@
     "geolib": "^2.0.24",
     "import-glob-loader": "^1.1.0",
     "js-yaml": "^3.13.1",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.21",
     "mixin-deep": "^2.0.1",
     "node-sass": "^4.7.2",
     "prop-types": "^15.6.1",
